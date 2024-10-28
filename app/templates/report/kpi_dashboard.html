@@ -1,0 +1,113 @@
+{% extends "report/basedetail.html" %}
+{% block title %}📊Key Performance Indicators (KPIs){% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+		{% if recommendation|length > 100 %}
+           
+			{{ recommendation | safe}}
+		{% else %}
+        <!-- Revenue Growth Rate -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-success text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-chart-area display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">Revenue Growth Rate</h4>
+                        <h1 class="display-3">{{ revenue_growth_rate | currency }}%</h1>
+                        <p>The percentage change in revenue from the previous month compared to the month before. This is a key metric to assess your business growth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Retention Rate -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-info text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-user-check display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">Customer Retention Rate (CRR)</h4>
+                        <h1 class="display-3">{{ customer_retention_rate | currency }}%</h1>
+                        <p>The percentage of customers who return to make purchases within a specified time period. This measures customer loyalty to your business.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Lifetime Value (CLTV) -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-warning text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-wallet display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">Customer Lifetime Value (CLTV)</h4>
+                        <h1 class="display-3">Rp. {{ cltv | currency }}</h1>
+                        <p>The average revenue generated from a customer over their lifetime with your company. This is an important indicator of long-term customer value.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Transaction Value (ATV) -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-primary text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-money-bill-wave display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">Average Transaction Value (ATV)</h4>
+                        <h1 class="display-3">Rp. {{ atv | currency }}</h1>
+                        <p>The average amount of money spent by a customer each time they make a purchase. This metric helps assess your pricing and marketing strategies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Churn Rate -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-danger text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-user-slash display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">Churn Rate</h4>
+                        <h1 class="display-3">{{ churn_rate | currency }}%</h1>
+                        <p>The percentage of customers who stop doing business with your company over a specific period. Churn rate helps understand how many customers are leaving your service.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Customer Payment Cash Flow -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-danger text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-comments-dollar display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">Customer Payment Cash Flow</h4>
+                        <h1 class="display-3">Rp. {{ cash_flow | currency }}</h1>
+                        <p>The amount of cash received by the company from customers as payment for goods or services. It shows the extent to which the company receives cash from customers, which can be used for operations, debt repayment, and other business needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-lg bg-gradient-danger text-white">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fa-solid fa-comments-dollar display-3 me-4"></i>
+                    <div>
+                        <h4 class="fw-bold">AI Recommendations</h4>
+                        <div class="text-dark">{{ recommendation | safe }}</div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+		{% endif %}
+		
+    </div>
+	<div class="mb-3 d-flex justify-content-end">
+		<button class="btn btn-warning w-30 no-print" onclick="printContent()"><i class="fa-solid fa-print"></i>&nbsp;Print&nbsp;</button>
+	</div>
+</div>
+{% endblock %}

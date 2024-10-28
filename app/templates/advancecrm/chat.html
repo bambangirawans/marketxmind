@@ -1,0 +1,114 @@
+{% extends "advancecrm/basedetail.html" %}
+{% block title %}AI Business Assistant{% endblock %}
+{% block content %}
+    <div class="page-content-wrapper">
+        <!-- Live Chat Intro-->
+        <div class="live-chat-intro mb-3">
+            <p>Start a conversation</p><img src="{{ url_for('static', filename='dashboard/img/bg-img/9.jpg') }}" alt="">
+            <div class="status online">We're online</div>
+        </div>
+        <!-- Support Wrapper-->
+        <div class="support-wrapper py-3">
+            <div class="container">
+                <!-- Live Chat Wrapper-->
+                <div class="live-chat-wrapper" id="chat-box">
+                    <!-- Dynamic chat messages will be inserted here -->
+                    {% for message in conversation %}
+                        {% if message.role == 'user' %}
+                            <!-- User Message Content-->
+                            <div class="user-message-content">
+                                <div class="user-message-text">
+                                    <div class="d-block">
+                                        <p>{{ message.content }}</p>
+                                    </div><span>{{ loop.index0 }}:42</span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <!-- Agent Message Content-->
+                            <div class="agent-message-content d-flex align-items-start">
+                                <div class="agent-thumbnail me-2 mt-2"><img src="{{ url_for('static', filename='dashboard/img/bg-img/9.jpg') }" alt=""></div>
+                                <div class="agent-message-text">
+                                    <div class="d-block">
+                                        <p>{{ message.content }}</p>
+                                    </div><span>{{ loop.index0 }}:00</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Type Message Form-->
+    <div class="type-text-form">
+        <form id="message-form">
+            <div class="form-group file-upload mb-0">
+                <input type="file"><i class="fa-solid fa-plus"></i>
+            </div>
+            <textarea class="form-control" id="user-input" name="message" cols="30" rows="1" placeholder="Type your message"></textarea>
+            <button type="submit">
+                <svg class="bi bi-arrow-right" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                </svg>
+            </button>
+        </form>
+    </div>
+<script>
+    document.getElementById('message-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const userInput = document.getElementById('user-input').value.trim();
+        const chatBox = document.getElementById('chat-box');
+
+        if (userInput === '') {
+            console.log("User input is empty.");
+            return;
+        }
+
+        // Display the user's message immediately in the chat box
+        chatBox.innerHTML += `
+            <div class='user-message-content'>
+                <div class='user-message-text'><p>${userInput}</p></div>
+            </div>`;
+        document.getElementById('user-input').value = ''; // Clear input field
+        
+        console.log("Sending message to server:", userInput);
+
+        fetch('/advancecrm/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userInput })
+        })
+        .then(response => {
+            console.log("Received response:", response);
+            if (!response.ok) {
+                throw new Error("Network response was not ok " + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Response data:", data);
+
+            if (data.response) {
+                // Display the assistant's response in the chat box
+                chatBox.innerHTML += `
+                    <div class='agent-message-content d-flex align-items-start'>
+                        <div class='agent-thumbnail me-2 mt-2'><img src="{{ url_for('static', filename='dashboard/img/bg-img/9.jpg') }}" alt=""></div>
+                        <div class='agent-message-text'><p>${data.response}</p></div>
+                    </div>`;
+            } else {
+                console.log("No response content received.");
+                chatBox.innerHTML += `<div class='error-message'>Error: No response received from the server.</div>`;
+            }
+            
+            // Scroll chat box to the latest message
+            chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+            chatBox.innerHTML += `<div class='error-message'>Error: Could not get a response from the server.</div>`;
+        });
+    });
+</script>
+
+{% endblock %}

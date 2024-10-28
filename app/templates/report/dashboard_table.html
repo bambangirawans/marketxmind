@@ -1,0 +1,31 @@
+{% extends "report/basedetail.html" %}
+{% block title %}Sales Report{% endblock %}
+{% block content %}
+<div class="container">
+   
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Period</th>
+                <th>Revenue</th>
+                <th>Payments</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in table_data %}
+            <tr>
+                <td>{{ row.time_period }}</td>
+                <td>{{ row.total_amount }}</td>
+                <td>{{ row.paid_amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr />
+    <h5>Revenue = The total amount of invoices issued during the period.</h5>
+    <h5>Payments = The total amount of payments made by customers during the period.</h5>
+    <div class="mb-3 d-flex justify-content-end">
+        <button class="btn btn-warning w-30 no-print" onclick="printContent()"><i class="fa-solid fa-print"></i>&nbsp;Print&nbsp;</button>
+    </div>
+</div>
+{% endblock %}
